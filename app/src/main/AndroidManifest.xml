@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- ML Kit's bundled model runs offline; drop the INTERNET permission its usage
+         telemetry pulls in, so the app cannot send anything off the device.
+         ACCESS_NETWORK_STATE stays: ML Kit's JobScheduler use needs it on Android 14+,
+         and it grants no network access. -->
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
     <uses-feature android:name="android.hardware.camera.any" android:required="false" />
     <uses-feature android:name="android.hardware.camera.front" android:required="false" />
 

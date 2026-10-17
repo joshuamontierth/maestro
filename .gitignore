@@ -9,3 +9,10 @@
 .externalNativeBuild
 .cxx
 *.apk
+.kotlin/
+.claude/
+# Release signing (never commit)
+*.keystore
+*.jks
+keystore.properties
+dist/

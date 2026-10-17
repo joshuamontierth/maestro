@@ -1,11 +1,27 @@
+<p align="center"><img src="icon.png" width="160" alt="Maestro icon"></p>
+
 # Maestro
 
 A hands-free **sheet-music PDF reader** for Android, in the spirit of forScore. Open a
 score, prop your tablet on the music stand, and turn pages with a **facial gesture**
 (a head turn or a wink) so your hands never leave the instrument.
 
-Face tracking runs **fully on-device and offline** via Google ML Kit — no images leave
-the phone, and there's no network dependency for detection.
+Face tracking runs **fully on-device and offline** via Google ML Kit's bundled model.
+Maestro doesn't request the Internet permission, so neither camera frames nor anything
+else can leave the device.
+
+<p align="center">
+  <img src="docs/reader.png" width="360" alt="Reader with the sample score">
+  <img src="docs/settings.png" width="360" alt="Gesture settings">
+</p>
+
+## Install
+
+Download the latest `maestro-<version>.apk` from
+[Releases](https://github.com/joshuamontierth/maestro/releases) and open it on your
+Android tablet or phone (allow "install unknown apps" for your browser or file manager
+when asked). Requires Android 8.0+ on an ARM device (all current phones and tablets) with
+a front camera.
 
 ## Status
 
@@ -75,10 +91,9 @@ ReaderScreen (Jetpack Compose): full-page view, status dot, tap zones, controls
 
 ## Build
 
-Requires a JDK 21 and the Android SDK. On this machine they live at:
-
-- SDK: `~/Android/Sdk` (referenced by `local.properties`)
-- JDK: system `openjdk-21-jdk`
+Requires JDK 17+ and the Android SDK (API 35). Point Gradle at the SDK with
+`ANDROID_HOME` or a `local.properties` containing `sdk.dir=/path/to/Android/Sdk`
+(Android Studio creates it for you).
 
 ```bash
 ./gradlew :app:assembleDebug        # build app/build/outputs/apk/debug/app-debug.apk
@@ -86,11 +101,16 @@ Requires a JDK 21 and the Android SDK. On this machine they live at:
 ./gradlew :app:lintDebug            # lint
 ```
 
+Release builds (`./gradlew :app:assembleRelease`) are minified with R8 and include only
+ARM libraries. They are signed with the key named in a `keystore.properties` file at the
+repo root (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`; not committed);
+without one they fall back to the debug key.
+
 ## Run on a device
 
 1. Enable **Developer options → USB debugging** on your Android tablet/phone and plug it in.
-2. `~/Android/Sdk/platform-tools/adb devices` — confirm it shows up.
-3. `~/Android/Sdk/platform-tools/adb install -r app/build/outputs/apk/debug/app-debug.apk`
+2. `adb devices` — confirm it shows up.
+3. `adb install -r app/build/outputs/apk/debug/app-debug.apk`
 4. Launch **Maestro**, grant the camera permission, tap **Open sample score** (or open
    your own PDF), then use your chosen gesture to flip pages. Tune in **Settings**;
    double-tap the page for immersive full-screen.
@@ -98,11 +118,8 @@ Requires a JDK 21 and the Android SDK. On this machine they live at:
 Since winking and head-turning can be awkward, good comfortable pairings are
 **Next = Smile / Previous = Long blink**, or **Next = Double blink / Previous = Smile**.
 
-Configuration: `minSdk 26`, `targetSdk 35`, Kotlin 2.0.21, Jetpack Compose, CameraX 1.4,
-ML Kit face-detection (bundled). Package id `com.maestro.app`. Personal/sideload — not
-Play-Store-configured.
+## License
 
-## Roadmap
-
-PDF library + setlists, two-page landscape spread, **eyebrow-raise** and **mouth-open**
-gestures (need MediaPipe face landmarks/blendshapes — not in ML Kit), annotations.
+[MIT](LICENSE). Face detection uses Google's
+[ML Kit](https://developers.google.com/ml-kit), which is distributed under its own
+[terms](https://developers.google.com/ml-kit/terms).

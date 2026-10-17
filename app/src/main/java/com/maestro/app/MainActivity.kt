@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -67,9 +68,12 @@ private fun AppRoot(viewModel: ReaderViewModel = viewModel()) {
             onRequestPermission = { permissionLauncher.launch(Manifest.permission.CAMERA) },
             onOpenSettings = { screen = Screen.SETTINGS }
         )
-        Screen.SETTINGS -> SettingsScreen(
-            viewModel = viewModel,
-            onBack = { screen = Screen.READER }
-        )
+        Screen.SETTINGS -> {
+            BackHandler { screen = Screen.READER }
+            SettingsScreen(
+                viewModel = viewModel,
+                onBack = { screen = Screen.READER }
+            )
+        }
     }
 }
